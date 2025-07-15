@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InvestiBlog - Analyses & Actualités Financières</title>
+  <style>
+    /* Fond avec deux images floutées en arrière-plan */
+    body {
+      font-family: Arial, sans-serif;
+      color: #2c3e50;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      min-height: 100vh;
+      background-color: #f9f9f9;
+      overflow-x: hidden;
+    }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: blur(12px);
+      opacity: 0.15;
+      z-index: -2;
+      pointer-events: none;
+    }
+    body::before {
+      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+    }
+    body::after {
+      background-image: url('https://images.unsplash.com/photo-1530026186672-e6e2744e4d7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+      filter: blur(18px);
+      opacity: 0.1;
+    }
+
+    header, footer, nav, section, article, aside, form, input, textarea, button {
+      box-sizing: border-box;
+    }
+    header {
+      background: linear-gradient(90deg, #1e3c72, #2a5298);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+    header p {
+      margin: 5px 0 0;
+      font-style: italic;
+      color: #dbe9fb;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    nav {
+      background-color: #ecf0f1cc; /* légèrement transparent */
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-weight: 600;
+      box-shadow: inset 0 -1px 0 #bdc3c7;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: saturate(180%) blur(8px);
+    }
+    nav a {
+      text-decoration: none;
+      color: #34495e;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #2980b9;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: auto;
+      position: relative;
+      z-index: 10;
+      background-color: rgba(255 255 255 / 0.9);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    section, aside {
+      padding: 20px;
+    }
+    form {
+      margin-top: 10px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, textarea:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
+    button {
+      background-color: #2980b9;
+      color: white;
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1f5f8b;
+    }
+    .like-btn {
+      background-color: #27ae60;
+      margin-top: 10px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      width: auto;
+    }
+    .like-btn:hover {
+      background-color: #1e8449;
+    }
+    .comment-section {
+      margin-top: 10px;
+    }
+    .comment {
+      border-top: 1px dashed #ccc;
+      margin-top: 5px;
+      padding-top: 5px;
+      font-style: italic;
+      color: #7f8c8d;
+    }
+    ul#news {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    ul#news li {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    ul#news li a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+    ul#news li a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #ecf0f1;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      position: relative;
+      z-index: 10;
+      border-radius: 0 0 12px 12px;
+    }
+    #mentions-legales {
+      max-width: 900px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 20px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      color: #34495e;
+      line-height: 1.5;
+      display: none;
+      position: relative;
+      z-index: 10;
+    }
+    @media screen and (max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>InvestiBlog</h1>
+    <p>Partagez vos analyses d'investissements avec la communauté européenne</p>
+  </header>
+
+  <nav>
+    <a href="#login">Connexion</a>
+    <a href="#signup">Inscription</a>
+    <a href="#analyses">Analyses</a>
+    <a href="#actualites">Actualités</a>
+    <a href="#poster">Poster</a>
+    <a href="#mentions-legales-link">Mentions légales</a>
+  </nav>
+
+  <main>
+    <section id="analyses">
+      <h2>Analyses des utilisateurs</h2>
+      <div id="posts">
+        <!-- Les analyses postées par les utilisateurs s'afficheront ici -->
+      </div>
+    </section>
+
+    <aside id="actualites">
+      <h2>Actualités Financières</h2>
+      <ul id="news">
+        <li>Chargement des actualités...</li>
+      </ul>
+    </aside>
+  </main>
+
+  <section id="poster" class="post-form" style="max-width: 900px; margin: 30px auto;">
+    <h2>Publiez votre analyse</h2>
+    <form id="postForm">
+      <input type="text" id="title" placeholder="Titre de votre analyse" required />
+      <textarea id="content" placeholder="Détaillez votre analyse ici..." required></textarea>
+      <button type="submit">Publier</button>
+    </form>
+  </section>
+
+  <section id="signup" style="max-width: 400px; margin: 30px auto;">
+    <h2>Inscription</h2>
+    <form>
+      <input type="text" placeholder="Nom d'utilisateur" required />
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Mot de passe" required />
+      <button type="submit">S'inscrire</button>
+    </form>
+  </section>
+
+  <section id="login" style="max-width: 400px; margin: 30px auto;">
+    <h2>Connexion</h2>
+    <form>
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Mot de passe" required />
+      <button type="submit">Se connecter</button>
+    </form>
+  </section>
+
+  <section id="mentions-legales">
+    <h2>Mentions Légales</h2>
+    <p>
+      Ce site, InvestiBlog, est une plateforme communautaire dédiée au partage d'analyses et d'actualités financières.
+      Il ne constitue en aucun cas un conseil en investissement ou une recommandation financière.
+    </p>
+    <p>
+      Les informations publiées sur ce site sont fournies à titre informatif uniquement. Chaque utilisateur est invité à
+      effectuer ses propres recherches et à consulter un professionnel avant de prendre toute décision d'investissement.
+    </p>
+    <p>
+      InvestiBlog décline toute responsabilité quant aux pertes ou dommages résultant de l'utilisation des informations publiées.
+    </p>
+    <p>
+      © 2025 InvestiBlog - Tous droits réservés.
+    </p>
+  </section>
+
+  <footer>
+    &copy; 2025 InvestiBlog - Tous droits réservés
+  </footer>
+
+  <script>
+    // Affichage des posts sauvegardés
+    const posts = document.getElementById('posts');
+    const postForm = document.getElementById('postForm');
+    const savedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    savedPosts.forEach(displayPost);
+
+    postForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      if (!title || !content) return;
+      const post = { title, content, likes: 0, comments: [] };
+
+      savedPosts.unshift(post);
+      localStorage.setItem('posts', JSON.stringify(savedPosts));
+
+      displayPost(post);
+      postForm.reset();
+    });
+
+    function displayPost(post) {
+      const newPost = document.createElement('article');
+      newPost.innerHTML = `
+        <h3>${post.title}</h3>
+        <p>${post.content}</p>
+        <button class="like-btn">👍 J'aime (<span class="like-count">${post.likes}</span>)</button>
+        <div class="comment-section">
+          <input type="text" placeholder="Commentaire..." class="comment-input" />
+          <button class="comment-btn">Commenter</button>
+          <div class="comments">
+            ${post.comments.map(c => `<div class="comment">${c}</div>`).join('')}
+          </div>
+        </div>
+        <hr>
+      `;
+
+      newPost.querySelector('.like-btn').addEventListener('click', () => {
+        post.likes++;
+        newPost.querySelector('.like-count').textContent = post.likes;
+        localStorage.setItem('posts', JSON.stringify(savedPosts));
+      });
+
+      const commentBtn = newPost.querySelector('.comment-btn');
+      const commentInput = newPost.querySelector('.comment-input');
+      const commentsContainer = newPost.querySelector('.comments');
+
+      commentBtn.addEventListener('click', () => {
+        const comment = commentInput.value.trim();
+        if (comment) {
+          post.comments.push(comment);
+          const commentDiv = document.createElement('div');
+          commentDiv.className = 'comment';
+          commentDiv.textContent = comment;
+          commentsContainer.appendChild(commentDiv);
+          commentInput.value = '';
+          localStorage.setItem('posts', JSON.stringify(savedPosts));
+        }
+      });
+
+      posts.prepend(newPost);
+    }
+
+    // Chargement des actualités
+    async function fetchNews() {
+      const newsList = document.getElementById('news');
+      try {
+        const res = await fetch('https://api.marketaux.com/v1/news/all?api_token=uHStw1KGXQgAgAqx2MLElBoeUc9S8Zb3Eiptht0d&language=fr&limit=5');
+        const data = await res.json();
+        newsList.innerHTML = '';
+        data.data.forEach(article => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="${article.url}" target="_blank" rel="noopener noreferrer">${article.title}</a>`;
+          newsList.appendChild(li);
+        });
+      } catch (error) {
+        newsList.innerHTML = '<li>Impossible de charger les actualités.</li>';
+      }
+    }
+
+    fetchNews();
+    setInterval(fetchNews, 10 * 60 * 1000);
+
+    // Gestion du menu mentions légales
+    const mentionsLink = document.querySelector('a[href="#mentions-legales-link"]');
+    const mentionsSection = document.getElementById('mentions-legales');
+
+    mentionsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Affiche la section Mentions Légales et scroll dessus
+      mentionsSection.style.display = 'block';
+      mentionsSection.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
